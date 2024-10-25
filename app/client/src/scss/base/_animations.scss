@@ -1,0 +1,21 @@
+@keyframes loader {
+  from {
+    transform: none;
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes checkStateFadeOut {
+  from {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}

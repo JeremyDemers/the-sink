@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+# This executable is sourced by the `app-boot-wrapper`.
+#
+# - This shell is running under the `smartlabuser` user.
+# - The `$PWD` here is `/home/smartlabuser/app/server`.
+# - The Python virtual environment is active in the context of this shell.
+# - The dependencies are already installed.
+
+set -e
+
+# Exporting this variable to not pass the `--app` parameter
+# to every `flask` command run.
+export FLASK_APP="${FLASK_APP:-api}"
+
+# Run DB migrations.
+flask db upgrade
+# Create default DB entries such as admin users.
+flask db-seeder seed

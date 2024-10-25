@@ -1,0 +1,32 @@
+{
+  "name": "md2ts",
+  "type": "module",
+  "types": "./types.d.ts",
+  "version": "1.0.0",
+  "description": "Convert Markdown to TypeScript.",
+  "keywords": [
+    "markdown",
+    "typescript",
+    "docs"
+  ],
+  "author": {
+    "name": "Jeremy Demers",
+    "email": "JeremySD99@gmail.com"
+  },
+  "peerDependencies": {
+    "@types/argparse": "*",
+    "@types/glob": "*",
+    "@types/markdown-it": "*",
+    "@types/katex": "*",
+    "argparse": "*",
+    "glob": "*",
+    "jsdom": "*",
+    "markdown-it": "*",
+    "markdown-it-dollarmath": "*",
+    "highlight.js": "*",
+    "katex": "*"
+  },
+  "bin": {
+    "md2ts": "md2ts.js"
+  }
+}

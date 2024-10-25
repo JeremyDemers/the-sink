@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# This script is designed for the derived repositories (forked, created from
+# a template).
+#
+# It deletes the contents that is uniquely relevant only for this repository
+# and sets up a structure of the derivative.
+#
+# The script is run once as part of the `ci.yml` GitHub Actions workflow
+# during the `deploy` job that deletes it upon completion.
+#
+# CAUTION! Do not copy this script manually to the derived project! This
+# action would result in removing the files and folders that have been
+# created during the work on a project.
+
+set -e
+
+if [[ ! -d .github ]]; then
+    echo "==> [ERROR] The script must be run from the project root."
+    exit 2
+fi
+
+rm -rf docs
+mkdir -p docs/adr
+echo "# ADRs" > docs/adr/README.md
+echo "# Docs" > docs/app/README.md

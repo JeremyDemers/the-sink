@@ -1,0 +1,124 @@
+@use 'sass:color';
+@use 'react-toastify/scss/main';
+@use '@/scss/abstract' as *;
+
+$vt-color-default: $c-blue-medium;
+$vt-text-color-default: $white;
+
+$vt-color-info: $vt-color-default;
+$vt-color-error: $c-red;
+$vt-color-success: $vt-color-default;
+$vt-color-warning: $vt-color-default;
+
+.Toastify {
+  &__toast {
+    @include same(100%, width, max-width);
+    align-items: start;
+    min-height: auto;
+    border-radius: 1rem;
+    border: 2px solid;
+    background-color: $white;
+    box-shadow: $bsh-default;
+    padding: 2rem 1.5rem 1.5rem;
+    margin-bottom: 1.5rem;
+    color: $c-gray-dark;
+    overflow: visible;
+
+    &::before {
+      display: block;
+      position: absolute;
+      left: 1.5rem;
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      border-radius: 50%;
+      background-color: $white;
+
+      @extend %font-icon;
+    }
+
+    &-container {
+      width: calc(100vw - 3rem);
+      max-width: 45rem;
+
+      &[class*=top] {
+        top: 82px;
+      }
+
+      &[class*=bottom] {
+        bottom: 5.5rem;
+      }
+
+      &.top-right {
+        padding-left: 15px;
+        padding-right: 15px;
+        right: 0;
+
+        @include breakpoint((from: widescreen)) {
+          right: calc(50vw - #{$container-max-width} / 2);
+        }
+      }
+    }
+
+    &--info {
+      border-color: $c-primary;
+
+      &::before {
+        color: $c-primary;
+        @extend %icon-info;
+      }
+    }
+
+    &--warning {
+      border-color: $c-red;
+
+      &::before {
+        color: $c-red;
+        @extend %icon-info;
+      }
+    }
+
+    &--error {
+      border-color: $c-red;
+
+      &::before {
+        color: $c-red;
+        @extend %icon-warning;
+      }
+    }
+
+    &--success {
+      border-color: $c-green;
+
+      &::before {
+        color: $c-green;
+        @extend %icon-success;
+      }
+    }
+
+    &-icon {
+      display: none;
+    }
+
+    &-body {
+      padding: 0;
+      font-size: 1.125rem;
+      font-weight: 700;
+      max-height: 400px;
+      overflow: auto;
+    }
+  }
+
+  &__progress-bar {
+    width: calc(100% - .5rem);
+    left: .25rem;
+    background-color: color.adjust($c-dark, $alpha: -.8);
+  }
+
+  &__close-button {
+    color: $c-dark;
+    position: absolute;
+    top: .25rem;
+    right: .75rem;
+  }
+}

@@ -1,0 +1,237 @@
+@use 'sass:map';
+@use 'sass:meta';
+
+@use './variables' as *;
+
+// Breakpoints
+@mixin breakpoint($map, $kind: 'width') {
+  $directions: (from: min, to: max);
+  $query: '';
+  @each $direction, $breakpoint in $map {
+    @if map.has-key($directions, $direction) {
+      @if $query != '' {
+        $query: $query + ') and (';
+      }
+      @if meta.variable-exists(breakpoints) and map.has-key($breakpoints, $breakpoint) {
+        $breakpoint: map.get($breakpoints, $breakpoint);
+      }
+      @if $direction == 'to' {
+        $breakpoint: $breakpoint - 1;
+      }
+      $query: $query + map.get($directions, $direction) + '-' + $kind + ': ' + $breakpoint;
+    }
+  }
+  @if $query != '' {
+    @media #{'(' + $query + ')'} {
+      @content;
+    }
+  }
+}
+
+// Use for properties with the same value.
+@mixin same($value, $properties...) {
+  @each $property in $properties {
+    #{$property}: $value;
+  }
+}
+
+@mixin fadeBackground($color) {
+  animation: fade 3s forwards;
+  background-color: $color;
+
+  @keyframes fade {
+    from {
+      background-color: rgba($color, 1);
+    }
+    to {
+      background-color: rgba($color, 0);
+    }
+  }
+}
+
+@mixin scrollbar($is-dark: false, $size: 6) {
+  &::-webkit-scrollbar {
+    width: #{$size}px;
+    height: #{$size}px;
+    transition: .3s background;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    transition: .3s background;
+
+    @if ($is-dark) {
+      background: mix($white, $c-gray-dark, 60%);
+    } @else {
+      background: $c-primary-light;
+    }
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 15px;
+
+    @if ($is-dark) {
+      background: transparent;
+    } @else {
+      background: $c-gray-lighter;
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    @if ($is-dark) {
+      background: mix($white, $c-gray-dark, 20%);
+    } @else {
+      background: $c-primary-medium;
+    }
+  }
+}
+
+%w-100vw {
+  display: block;
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  transform: translateX(-50%);
+  border: none;
+  border-bottom: 1px solid $c-gray-light;
+  margin: -1px 0 0;
+}
+
+%flex-center-vertical {
+  display: flex;
+  align-items: center;
+}
+
+%flex-column-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+%form-typo {
+  font-size: $f-v-font-size;
+  line-height: $f-v-line-height;
+  font-weight: 400;
+  letter-spacing: $ls-default;
+}
+
+%form-input {
+  width: 100%;
+  border: $f-v-border-width solid $c-primary-dark;
+  background-color: $white;
+  border-radius: $f-v-border-radius;
+  padding: calc(#{$f-v-paddings-y} - #{$f-v-border-width}) $f-v-paddings-x;
+
+  &:focus {
+    border-color: $c-primary;
+  }
+
+  &:disabled,
+  &.disabled,
+  &[disabled] {
+    border-color: $c-gray-disabled;
+    background-color: $c-gray-lighter;
+  }
+}
+
+%loader {
+  @include same(1.25rem, width, height);
+  font-size: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  border-top-color: $white;
+  border-left-color: $white;
+  animation: loader .6s linear;
+  animation-iteration-count: infinite;
+
+  &--primary {
+    @include same($c-primary, border-top-color, border-left-color);
+    @extend %loader;
+  }
+}
+
+%reset-button {
+  appearance: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+%dropdown-toggle-separator {
+  content: '';
+  display: block;
+  height: calc(100% - .3125rem);
+  border-left: 1px solid $c-gray;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+%btns--with-separator {
+  .btn + .btn {
+    position: relative;
+    margin-left: 1rem;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: -.5rem;
+      background-color: $c-gray-table-border;
+    }
+  }
+}
+
+%sink-bg-before {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    width: 100%;
+    height: 31.5rem;
+    background-color: $c-blue-bg;
+    clip-path: polygon(0 0, 100% 0%, 100% 36%, 0% 100%);
+
+    @include breakpoint((from: desktop)) {
+      top: 6rem;
+    }
+  }
+}
+
+%with-reset-button {
+  .form-input:not([type=checkbox], [type=radio]) {
+    padding-right: 2.25rem
+  }
+
+  .reset-field-value {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $c-primary-dark;
+    transition: color .15s, opacity .15s ease;
+
+    &:hover {
+      color: $c-primary-light;
+    }
+  }
+
+  // Hide reset button where it already exists
+  .own-reset-button {
+    + .reset-field-value {
+      display: none;
+    }
+  }
+}

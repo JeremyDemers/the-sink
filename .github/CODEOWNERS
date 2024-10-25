@@ -1,0 +1,10 @@
+# This file defines the individuals and teams that are responsible for code in this repository.
+# Read more: https://help.github.com/articles/about-codeowners/
+#
+# Order is important: the last matching pattern has the highest precedence.
+
+.github/workflows/ci.yml @JeremyDemers/the-sink-platform-devsecops
+.github/workflows/deploy.yml @JeremyDemers/the-sink-platform-devsecops
+
+aws/services/cli-tools/app-boot @JeremyDemers/the-sink-platform-devsecops
+aws/services/cli-tools/rds-dump @JeremyDemers/the-sink-platform-devsecops

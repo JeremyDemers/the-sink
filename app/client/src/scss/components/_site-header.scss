@@ -1,0 +1,228 @@
+@use 'sass:color';
+@use '@/scss/abstract' as *;
+
+.site-header {
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+  box-shadow: 0 2px 3px 0 color.adjust($black, $alpha: -.85);
+  background-color: $white;
+  position: relative;
+  z-index: 2;
+
+  &__logo {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 2;
+    letter-spacing: .19px;
+    text-decoration: none;
+    color: $c-primary-dark;
+
+    span {
+      font-weight: 400;
+    }
+
+    &:hover {
+      color: $c-primary;
+      text-decoration: none;
+    }
+  }
+
+  .dialog-popup__overlay {
+    top: 100%;
+    height: 100vh;
+  }
+}
+
+.menu__btn {
+  position: relative;
+  width: 1.75rem;
+  height: 1.75rem;
+  cursor: pointer;
+  z-index: 1;
+  border-color: transparent;
+
+  @include breakpoint((from: desktop)) {
+    display: none;
+  }
+
+  span,
+  span::before,
+  span::after {
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: $c-primary;
+    transition-duration: .25s;
+  }
+
+  span {
+    left: 0;
+
+    &::before {
+      content: '';
+      top: -8px;
+    }
+    &::after {
+      content: '';
+      top: 8px;
+    }
+  }
+
+  &:active {
+    // Overwrite bootstrap styles.
+    border-color: transparent !important;
+  }
+
+  &.active {
+    border-color: transparent;
+
+    span {
+      transform: rotate(45deg);
+
+      &::before {
+        opacity: 0;
+        top: 0;
+        transform: rotate(0deg);
+      }
+
+      &::after {
+        top: 0;
+        transform: rotate(90deg);
+      }
+    }
+  }
+}
+
+.main-menu {
+  background-color: $white;
+  padding: 2rem;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+  min-width: 320px;
+  z-index: 2;
+
+  transform: translateX(100%);
+  transition: transform .3s ease;
+
+  @include breakpoint((from: desktop)) {
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+    padding: 0;
+    transform: none;
+
+    &::before {
+      display: none;
+    }
+  }
+
+  &::before {
+    content: '';
+    box-shadow: 0 2px 3px 0 color.adjust($black, $alpha: -.85);
+    width: 100%;
+    height: 3px;
+    position: absolute;
+    top: -3px;
+    left: 0;
+  }
+
+  &.active {
+    transform: translateX(0);
+  }
+}
+
+.logout-mobile {
+  align-self: flex-end;
+  padding-left: 0;
+  padding-right: 0;
+
+  &:active {
+    border-color: transparent !important;
+  }
+
+  @include breakpoint((from: desktop)) {
+    display: none;
+  }
+}
+
+.logout-desktop {
+  display: none;
+  @include breakpoint((from: desktop)) {
+    display: block;
+  }
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+
+  @include breakpoint((from: '480px')) {
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
+  .status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+
+    @include breakpoint((from: '480px')) {
+      margin-bottom: 0;
+    }
+
+    i {
+      margin: 0 .25rem 0 .75rem;
+    }
+
+    &-name {
+      text-transform: capitalize;
+    }
+  }
+}
+
+.status {
+  &-draft {
+    color: $c-orange;
+  }
+
+  &-completed {
+    color: $c-green;
+  }
+
+  &-archived {
+    color: $c-gray-light;
+  }
+}
+
+// Project transitions state actions.
+.transition-actions {
+  display: flex;
+
+  @include breakpoint((from: tablet)) {
+    margin: 0;
+  }
+
+  &--item {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+
+    &:not(:last-child)::after {
+      content: '|';
+      font-size: .75rem;
+      margin: 0 1rem;
+    }
+
+    .btn {
+      font-weight: inherit;
+    }
+  }
+}

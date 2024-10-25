@@ -1,0 +1,158 @@
+name: CI
+
+on: [push]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "3.11"
+          - "3.12"
+        command:
+          - lint
+          - test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ matrix.version }}"
+          cache: "pip"
+
+      - name: Install dependencies
+        working-directory: ./app/server
+        run: |
+          pip install --upgrade pip
+          make install
+
+      - name: Run
+        working-directory: ./app/server
+        run: make ${{ matrix.command }}
+
+  node:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version:
+          - "20.x"
+        command:
+          - lint
+          - build
+          - test
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "${{ matrix.version }}"
+          cache: "npm"
+          cache-dependency-path: ./app/client/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./app/client
+        run: npm ci
+
+      - name: Run
+        working-directory: ./app/client
+        run: npm run ${{ matrix.command }}
+
+  config:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        command:
+          - "cfn-lint -t ./aws/cfn-template.yml -i W"
+          - "slw--repo--validate-name '${{ github.event.repository.name }}'"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: JeremyDemers/slw-ci-cd@1.1
+        with:
+          python-version: "3.12"
+
+      - name: Run
+        run: "${{ matrix.command }}"
+
+  deploy:
+    if: github.ref == 'refs/heads/1.1'
+    needs: [python, node, config]
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: slw
+        uses: JeremyDemers/slw-ci-cd@1.1
+        with:
+          python-version: "3.12"
+          aws-login: true
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: "npm"
+          cache-dependency-path: ./app/client/package-lock.json
+
+      - name: Cleanup the project repository
+        run: |
+          SCRIPT=.github/scripts/slw--repo--cleanup
+
+          # The clenup is required only for the derived
+          # repositories and is a one-time action.
+          if [[ "smart-lab-web-base" != "${{ github.event.repository.name }}" && -f "$SCRIPT" ]]; then
+            "$SCRIPT"
+            # Delete the cleanup script as it should run once.
+            rm "$SCRIPT"
+          fi
+
+      - name: Configure the project repository
+        run: slw--repo--configure '${{ github.event.repository.name }}'
+
+      # IMPORTANT!
+      # - The commit is produced only is case there are changes.
+      # - The push of a created commit does not trigger any of the workflows.
+      #   See https://github.com/peter-evans/create-pull-request/issues/48#issuecomment-536184102
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Maintenance: Configure the repository"
+          push_options: --force
+
+      - name: Run Node Build
+        working-directory: ./app/client
+        run: |
+          npm ci
+          npm run build
+
+      - name: Zip
+        run: |
+          zip --quiet -r latest \
+            ./app/server/ \
+            ./app/client/build/ \
+            ./aws
+
+      - name: Upload artifact to AWS
+        run: |
+          ARCHIVE_PATH="s3://${{ steps.slw.outputs.aws-s3-bucket-platform-pipeline }}/${{ github.event.repository.name }}"
+
+          aws s3 cp ./latest.zip "$ARCHIVE_PATH/latest.zip"
+          aws s3 cp ./latest.zip "$ARCHIVE_PATH/${{ github.sha }}.zip"
+
+      - name: Monitor pipeline
+        run: |
+          slw--aws--pipeline-monitor \
+            "${{ github.event.repository.name }}-stage-pipeline" \
+            "${{ steps.slw.outputs.aws-region }}"

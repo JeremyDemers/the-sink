@@ -1,0 +1,190 @@
+@use '@/scss/abstract' as *;
+
+table {
+  border-radius: .625rem;
+  overflow: hidden;
+  font-size: .875rem;
+
+  @include breakpoint((to: tablet)) {
+    box-shadow: 0 0 5px 2px rgba($black, .1);
+  }
+}
+
+thead {
+  background-color: $c-blue-dark;
+  color: $white;
+
+  @include breakpoint((to: tablet)) {
+    display: block;
+    width: 100%;
+    font-size: .75rem;
+  }
+
+  tr {
+    @include breakpoint((to: tablet)) {
+      display: flex;
+      width: 100%;
+    }
+  }
+
+  th {
+    padding: .5rem 1rem;
+
+    @include breakpoint((to: tablet)) {
+      display: flex;
+      flex: 1 1 100%;
+
+      padding: .5rem;
+
+      span {
+        flex: 1 1 100%;
+        align-items: center;
+      }
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid $c-blue-extra-light;
+    }
+
+    &[title] {
+      cursor: pointer;
+      transition: background-color .3s ease;
+
+      &:hover {
+        background-color: $c-primary;
+      }
+    }
+  }
+
+  .active {
+    background-color: $c-primary;
+  }
+
+  //  Action column
+  .action {
+    @include breakpoint((to: tablet)) {
+      display: none;
+    }
+  }
+}
+
+tbody {
+  @include breakpoint((to: tablet)) {
+    display: block;
+    width: 100%;
+  }
+
+  tr {
+    background-color: $white;
+    border-bottom: 1px solid $c-gray-bright;
+
+    @include breakpoint((to: tablet)) {
+      display: flex;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    &:nth-child(odd) {
+      background-color: $c-gray-white;
+    }
+
+    &:only-child {
+      background-color: $white;
+    }
+  }
+
+  td {
+    padding: 1rem;
+  }
+}
+
+.odd-cols,
+.even-cols {
+  @include breakpoint((to: tablet)) {
+    .table-col {
+      padding: .75rem 1rem;
+      width: 50%;
+      border-bottom: 1px solid $c-gray-bright;
+      // Overwrite inline styles
+      min-width: auto !important;
+      max-width: none !important;
+
+      // First & last cols always full width.
+      &.actions-col,
+      &:first-child {
+        width: 100% !important;
+      }
+    }
+
+    .actions-col {
+      border-bottom-color: transparent;
+      border-right: 1px solid $c-blue-extra-light;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.odd-cols {
+  .table-col {
+    @include breakpoint((to: tablet)) {
+      &:nth-child(odd):not(:first-child):not(:last-child) {
+        border-right: 1px solid $c-blue-extra-light;
+      }
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:not(:first-child):not(:last-child):not(:nth-child(2)),
+        &:not(:first-child):not(:last-child):not(:nth-child(2)) {
+          width: 50% !important;
+        }
+      }
+
+      &:nth-child(2) {
+        width: 100% !important;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      width: 100% !important;
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:not(:first-child):not(:last-child):not(:nth-child(2)),
+        &:not(:first-child):not(:last-child):not(:nth-child(2)) {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+.even-cols {
+  .table-col {
+    @include breakpoint((to: tablet)) {
+      &:nth-child(even):not(:first-child):not(:last-child) {
+        border-right: 1px solid $c-blue-extra-light;
+      }
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:not(:first-child):not(:last-child),
+        &:not(:first-child):not(:last-child) {
+          width: 50% !important;
+        }
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      width: 100% !important;
+
+      &:nth-child(odd),
+      &:nth-child(even) {
+        &:not(:first-child):not(:last-child),
+        &:not(:first-child):not(:last-child) {
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}

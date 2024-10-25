@@ -1,0 +1,51 @@
+@use '@/scss/abstract' as *;
+
+.page-login {
+  position: fixed;
+  top: 6rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-bottom: 6rem;
+  background: url(../../images/login-image.png) no-repeat center right $c-blue-bg;
+  background-size: 50% auto;
+
+  @include breakpoint((from: widescreen)) {
+    background-size: auto 83%;
+  }
+
+  &__container {
+    box-shadow: 0 8px 16px -6px rgba(24, 39, 75, .08);
+    border-radius: 1rem;
+    padding: 1.25rem;
+    position: relative;
+    background-color: $white;
+    max-width: 74%;
+    margin: auto;
+
+    @include breakpoint((from: tablet)) {
+      padding: 2rem 3.5rem 2rem 6.25rem;
+      border-radius: 0 1rem 1rem 0;
+      margin-left: 0;
+    }
+
+    @include breakpoint((from: tablet)) {
+      &::before {
+        content: '';
+        display: block;
+        width: .25rem;
+        position: absolute;
+        top: 2rem;
+        bottom: 2rem;
+        left: 5rem;
+        background-color: #0095FF;
+      }
+    }
+
+    h1 {
+      span {
+        display: block;
+      }
+    }
+  }
+}

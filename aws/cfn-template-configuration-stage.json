@@ -1,0 +1,26 @@
+{
+  "Parameters": {
+    "PlatformName": "the-sink",
+    "AppName": "the-sink",
+    "AppEnv": "stage",
+    "RuntimeVersion": "3.12",
+    "TaskCpu": "256",
+    "TaskMemory": "512",
+    "TaskEphemeralStorage": "21",
+    "EcsAlbIdleTimeout": "60",
+    "InstancesCount": "1",
+    "EcrTag": "latest",
+    "RDSInstanceClass": "db.t4g.micro",
+    "RDSStorageType": "gp2",
+    "RDSAllocatedStorage": "20",
+    "RDSEngineVersion": "16.3"
+  },
+  "Tags": {
+    "CostCenterID": "2310693",
+    "PrimaryOwner": "JeremySD99@gmail.com",
+    "SecondaryOwner": "JeremySD99@gmail.com",
+    "ProjectGroup": "the-sink",
+    "ProjectCode": "the-sink",
+    "Name": "the-sink-stage"
+  }
+}

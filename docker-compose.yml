@@ -1,0 +1,105 @@
+x-common:
+  shared-env-vars: &shared-env-vars
+    APP_NAME: "$COMPOSE_PROJECT_NAME"
+
+services:
+  postgres:
+    image: "$DATABASE_IMAGE"
+    hostname: "$DATABASE_HOST"
+    environment:
+      POSTGRES_USER: "$DATABASE_USER"
+      POSTGRES_PASSWORD: "$DATABASE_PASSWORD"
+      PGDATA: /data/postgres
+      POSTGRES_DB: "$DATABASE_NAME"
+    ports:
+      # Using `0` tells Docker Compose to find the free port on a host.
+      - "0:$DATABASE_PORT"
+    volumes:
+      - postgres:/data/postgres
+    restart: unless-stopped
+
+  pgadmin:
+    build:
+      dockerfile: Dockerfile
+      context: .docker-compose/pgadmin
+      args:
+        VERSION: "$VERSION_PGADMIN"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_SERVER_JSON_FILE: "/var/lib/pgadmin/servers.json"
+      SCRIPT_NAME: "/pgadmin"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pgadmin.rule=PathPrefix(`/pgadmin`)"
+      - "traefik.http.services.pgadmin.loadbalancer.server.port=80"
+    restart: unless-stopped
+
+  server:
+    build:
+      context: .docker-compose/server
+      args:
+        VERSION: "$VERSION_PYTHON"
+        WORKDIR: "$DIR_MOUNT/app/server"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.strip-prefix-server.stripprefix.prefixes=/$FLASK_APP"
+      - "traefik.http.routers.server.rule=PathPrefix(`/$FLASK_APP`)"
+      - "traefik.http.routers.server.middlewares=strip-prefix-server"
+      - "traefik.http.services.server.loadbalancer.server.port=$PORT_FLASK"
+    env_file:
+      - .env
+    environment:
+      <<: *shared-env-vars
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+    ports:
+      - "$PORT_DEBUGPY:$PORT_DEBUGPY"
+    volumes:
+      - "./app/server:$DIR_MOUNT/app/server"
+      - "./aws/services/cli-tools:/opt/cli-tools:ro"
+
+  client:
+    build:
+      context: .docker-compose/client
+      args:
+        VERSION: "$VERSION_NODE"
+        WORKDIR: "$DIR_MOUNT/app/client"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=PathPrefix(`/`)"
+      - "traefik.http.services.client.loadbalancer.server.port=$PORT_REACT"
+    env_file:
+      - .env
+    environment:
+      <<: *shared-env-vars
+    volumes:
+      # The entire project structure is necessary for `npm run docs:build`
+      # as it validates the references to files/dirs in Markdown and uses
+      # Git to determine the project root and GitHub base URL.
+      - "./:$DIR_MOUNT:ro"
+      - "./app/client:$DIR_MOUNT/app/client"
+
+  loadbalancer:
+    image: traefik:v2.9
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Bind this Traefik instance to the containers of this stack.
+      # Without doing so, two or more simultaneously running stacks
+      # are conflicting with one another network-wise.
+      - "--providers.docker.constraints=Label(`com.docker.compose.project`, `$COMPOSE_PROJECT_NAME`)"
+      - "--entrypoints.web.address=:$PORT_APP"
+    ports:
+      - "$PORT_APP:$PORT_APP"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+volumes:
+  postgres:
+  pgadmin:

@@ -1,0 +1,119 @@
+@use 'sass:map';
+@use '@/scss/abstract' as *;
+
+.documentation {
+  .breadcrumbs {
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+
+    a {
+      position: relative;
+      margin-right: 1.3rem;
+
+      &:after {
+        content: '>';
+        position: absolute;
+        left: 100%;
+        margin: 0 0.3rem;
+        color: $black;
+      }
+
+      &.active {
+        color: $c-blue-dark;
+      }
+    }
+  }
+
+  .sidebar {
+    position: relative;
+
+    .navigation {
+      $link-border-height: 1px;
+      $link-bottom-padding: .25rem;
+
+      position: sticky;
+      top: 1rem;
+      padding: .5rem 1rem $link-bottom-padding;
+      background-color: $c-blue-medium;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: $link-bottom-padding;
+        left: 0;
+        height: $link-border-height;
+        width: 100%;
+        background: $c-blue-medium;
+      }
+
+      ul {
+        list-style: none;
+
+        ul {
+          > li {
+            margin-left: 1rem;
+          }
+        }
+      }
+
+      a {
+        padding: .5rem;
+        border-bottom: $link-border-height solid $c-gray-disabled-light;
+        text-decoration: none;
+
+        &.active {
+          color: $c-gray-disabled !important;
+          pointer-events: none;
+          text-decoration: none;
+        }
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.markdown-body {
+  blockquote {
+    $styles: (
+      note:       (color: #0969da, icon: info),
+      tip:        (color: #1a7f37, icon: pin),
+      important:  (color: #8250df, icon: pin),
+      warning:    (color: #9a6700, icon: warning),
+      caution:    (color: #cf222e, icon: warning),
+    );
+
+    .alert-heading {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: .8rem;
+      font-weight: bold;
+
+      .alert-icon {
+        @extend %font-icon;
+
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
+
+    @each $name, $style in $styles {
+      $color: map.get($style, 'color');
+
+      &.alert-#{$name} {
+        border-color: $color;
+
+        .alert-heading {
+          color: $color;
+
+          .alert-icon::before {
+            @extend %icon-#{map.get($style, 'icon')};
+          }
+        }
+      }
+    }
+  }
+}

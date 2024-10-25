@@ -1,0 +1,68 @@
+%font-icon {
+  font-size: 2rem;
+  display: inline-block;
+  font-family: 'font-icon';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$font-icons: (
+  arrow-up: '\e92c',
+  arrow-down: '\e918',
+  arrow-right: '\e91b',
+  arrow-left: '\e902',
+  chevron-up: '\e916',
+  chevron-down: '\e901',
+  chevron-right: '\e912',
+  chevron-left: '\e913',
+  no-edit: '\e92e',
+  draft: '\e92b',
+  back_to_draft: '\e92b',
+  unarchive: '\e92a',
+  restore: '\e92a',
+  files-amount: '\e929',
+  checkmark-thin: '\e927',
+  reset: '\e926',
+  pin: '\e924',
+  expand: '\e925',
+  download: '\e922',
+  generate: '\e923',
+  loading: '\e91f',
+  file: '\e920',
+  upload: '\e91e',
+  revision: '\e91d',
+  scan: '\e917',
+  sort: '\e919',
+  success: '\e91a',
+  complete: '\e91a',
+  completed: '\e91a',
+  print: '\e90a',
+  qr: '\e90b',
+  delete: '\e90c',
+  archive: '\e90d',
+  archived: '\e90d',
+  diff: '\e90e',
+  file-size: '\e915',
+  message: '\e90f',
+  block: '\e910',
+  plus: '\e911',
+  edit: '\e914',
+  external-link: '\e909',
+  warning: '\e908',
+  info: '\e907',
+  checkmark: '\e906',
+  undo: '\e905',
+  filter: '\e903',
+  search: '\e904',
+  close: '\e900',
+  logout: '\e92d',
+);
+
+@each $name, $glyph in $font-icons {
+  %icon-#{$name} {
+    content: $glyph;
+  }
+}

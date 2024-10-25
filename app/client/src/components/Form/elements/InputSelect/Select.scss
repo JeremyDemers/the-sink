@@ -1,0 +1,139 @@
+@use '@/scss/abstract' as *;
+
+.select-container {
+  width: 100%;
+
+  .loader {
+    position: absolute;
+    background: $c-gray-lighter;
+
+    > * {
+      display: none;
+    }
+  }
+
+  .select {
+    &__control {
+      min-height: 3rem;
+      border: 2px solid $c-blue-dark;
+      background-color: $white;
+      border-radius: 6.2rem;
+      padding: .25rem .95rem .25rem 1.5rem;
+      transition: none;
+
+      &--menu-is-open {
+        border-radius: 1.5rem 1.5rem 0 0;
+
+        .select__indicator {
+          transform: rotate(-180deg);
+        }
+      }
+
+      &--is-disabled {
+        color: $c-gray-disabled;
+        border-color: $c-gray-disabled;
+        background-color: $c-gray-lighter;
+      }
+
+      &--is-readonly {
+        background-color: rgba($white, .5);
+        border-color: $c-gray-disabled-light;
+        color: $black;
+
+        .select__indicator {
+          color: $c-gray-disabled-light;
+        }
+      }
+
+      &--is-focused {
+        border-color: $c-blue;
+      }
+
+      .touched.has-error & {
+        border-color: $c-red;
+        color: $c-red;
+      }
+    }
+
+    &__indicator {
+      transition: transform .3s ease;
+      cursor: pointer;
+    }
+
+    &__menu {
+      background-color: $white;
+      left: 0;
+      border-radius: 0 0 2rem 2rem;
+      border: solid 2px $c-blue;
+      border-top-width: 0;
+      top: calc(100% - 0px);
+      width: 100%;
+      overflow: hidden;
+
+      .touched.error & {
+        border-color: $c-red;
+      }
+    }
+
+    &__option {
+      padding: .8rem 1.5rem;
+      cursor: pointer;
+
+      &:hover {
+        color: $c-blue;
+      }
+    }
+
+    &__placeholder {
+      color: $c-gray;
+    }
+
+    &__menu-notice {
+      padding: .8rem 1.5rem;
+      text-align: left;
+    }
+
+    &__clear-indicator {
+      display: flex;
+      align-items: center;
+      transition: color .3s ease;
+
+      &:hover {
+        color: $c-blue-light;
+      }
+
+      + .select__indicator-separator {
+        height: 1rem;
+        align-self: center;
+        margin: 0 .25rem;
+        background-color: $c_gray-light;
+      }
+    }
+  }
+}
+
+.select-multi {
+  .select {
+    &__multi-value {
+      font-size: .875rem;
+      line-height: 1.5;
+      background-color: $c-primary-extra-light;
+      padding: 0 0 0 .5rem;
+      border-radius: 1rem;
+      margin: .15rem;
+
+      &__remove {
+        color: $c-primary;
+        border-radius: 0 1rem 1rem 0;
+        margin-left: .25rem;
+        padding: .3rem .25rem .25rem .15rem;
+        transition: color .3s ease, background-color .3s ease;
+
+        &:hover {
+          color: $white;
+          background-color: $c-red;
+        }
+      }
+    }
+  }
+}

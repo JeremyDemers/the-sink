@@ -1,0 +1,100 @@
+{
+  "name": "client",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
+    "@tanstack/react-table": "^8.20.5",
+    "ag-grid-react": "^32.3.0",
+    "axios": "^1.7.7",
+    "body-scroll-lock": "^4.0.0-beta.0",
+    "bootstrap": "^5.3.3",
+    "classnames": "^2.5.1",
+    "formik": "^2.4.6",
+    "js-cookie": "^3.0.5",
+    "lodash.isequal": "^4.5.0",
+    "mustache": "^4.2.0",
+    "normalize.css": "^8.0.1",
+    "react": "^18.2.0",
+    "react-bootstrap": "^2.10.5",
+    "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.10",
+    "react-redux": "^8.1.3",
+    "react-router-dom": "^6.27.0",
+    "react-select": "^5.8.1",
+    "react-toastify": "^9.1.3",
+    "sass": "^1.80.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.2",
+    "@testing-library/react": "^16.0.1",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/body-scroll-lock": "^3.1.2",
+    "@types/glob": "^8.1.0",
+    "@types/js-cookie": "^3.0.6",
+    "@types/lodash.isequal": "^4.5.8",
+    "@types/mustache": "^4.2.5",
+    "@types/node": "^18.19.59",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react-swc": "^3.7.1",
+    "@vitest/coverage-v8": "^2.1.3",
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-slw": "file:tools/eslint/eslint-plugin-slw",
+    "eslint-plugin-sonarjs": "^1.0.4",
+    "eslint-plugin-xss": "^0.1.12",
+    "jsdom": "^25.0.1",
+    "madge": "^8.0.0",
+    "md2ts": "file:tools/docs/md2ts",
+    "mermaid": "^11.3.0",
+    "npm-run-all": "^4.1.5",
+    "type-fest": "^4.26.1",
+    "vite-tsconfig-paths": "^5.0.1",
+    "vitest": "^2.0.5"
+  },
+  "scripts": {
+    "prestart": "run-s docs:build",
+    "start": "vite",
+    "prebuild": "run-s docs:build",
+    "build": "tsc && vite build",
+    "docs:build": "rm -rf src/pages/Docs/Build && md2ts ../../docs/app src/pages/Docs/Build/docs",
+    "eslint": "eslint ./src ./tools --color --ext .js,.ts,.tsx,.mts",
+    "ts:typecheck": "tsc --noemit",
+    "madge": "madge --circular ./src ./tools --extensions js,ts,tsx,mts --warning",
+    "lint": "run-s --continue-on-error eslint ts:typecheck madge",
+    "lint-fix": "npm run eslint -- --fix",
+    "pretest": "run-s docs:build",
+    "test": "TZ=UTC vitest",
+    "test-coverage": "npm run test -- --coverage"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "madge": {
+    "tsConfig": "./tsconfig.json",
+    "detectiveOptions": {
+      "ts": {
+        "skipTypeImports": true
+      },
+      "tsx": {
+        "skipTypeImports": true
+      }
+    }
+  }
+}

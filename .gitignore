@@ -1,0 +1,21 @@
+# misc
+.DS_Store
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# JetBrains
+.idea/
+
+#VS Code
+!/.vscode/
+/.vscode/*
+!/.vscode/launch.json
+.history
+.ssh
+
+# Python
+.venv/
+.mypy_cache/

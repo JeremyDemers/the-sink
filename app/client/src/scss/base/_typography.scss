@@ -1,0 +1,94 @@
+@use '@/scss/abstract' as *;
+
+body,
+button,
+input,
+{
+  font-family: $ff-default;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.17;
+  letter-spacing: -1px;
+  color: $black;
+  font-weight: 300;
+  margin: 1rem 0 1.5rem;
+
+  span {
+    font-size: 1.5rem;
+    letter-spacing: $ls-default;
+    line-height: 1.33;
+  }
+
+  @include breakpoint((from: tablet)) {
+    font-size: 2.5rem;
+  }
+
+  @include breakpoint((from: desktop)) {
+    font-size: 3rem;
+  }
+}
+
+h2 {
+  font-size: 1.75rem;
+  letter-spacing: $ls-medium;
+  font-weight: 300;
+  color: $c-primary-dark;
+  margin-bottom: .5rem;
+
+  @include breakpoint((from: tablet)) {
+    font-size: 2rem;
+  }
+}
+
+h3 {
+  font-size: 1.25rem;
+  line-height: 1.33;
+  letter-spacing: $ls-default;
+  font-weight: 400;
+  color: $c-primary-dark;
+  margin-bottom: .5rem;
+
+  @include breakpoint((from: tablet)) {
+    font-size: 1.5rem;
+  }
+}
+
+h5 {
+  font-size: 1.125rem;
+  letter-spacing: $ls-default;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: $ls-default;
+}
+
+a {
+  color: $c-primary;
+
+  &:hover {
+    color: $c-primary-light;
+  }
+}
+
+b,
+strong {
+  font-weight: 700;
+}
+
+.subheading {
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.43;
+  color: $c-primary-dark;
+}
+
+.fs-sm {
+  font-size: 0.75rem;
+}

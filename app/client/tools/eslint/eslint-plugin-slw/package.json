@@ -1,0 +1,24 @@
+{
+  "name": "eslint-plugin-slw",
+  "version": "1.0.0",
+  "description": "The Smart Lab Web ESLint extension.",
+  "main": "index.js",
+  "keywords": [
+    "eslint",
+    "lint",
+    "extension",
+    "plugin"
+  ],
+  "author": {
+    "name": "Jeremy Demers",
+    "email": "JeremySD99@gmail.com"
+  },
+  "peerDependencies": {
+    "@eslint/eslintrc": "*",
+    "@typescript-eslint/parser": "*",
+    "@typescript-eslint/typescript-estree": "*",
+    "@typescript-eslint/visitor-keys": "*",
+    "eslint": "*",
+    "glob": "*"
+  }
+}

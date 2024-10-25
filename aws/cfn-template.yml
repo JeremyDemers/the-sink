@@ -1,0 +1,143 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  The Sink Platform - Application Stack Python
+
+Parameters:
+  PlatformName:
+    Description: Platform name
+    Type: String
+    MinLength: 1
+    MaxLength: 30
+    Default: smart-lab-web-platform
+
+  AppName:
+    Description: Application name
+    Type: String
+    MinLength: 5
+    MaxLength: 24
+
+  AppEnv:
+    Description: Application environment name
+    Type: String
+    MinLength: 1
+    MaxLength: 5
+
+  RuntimeVersion:
+    Description: Runtime version, choose from 3.10, 3.11, 3.12
+    Type: String
+    AllowedValues:
+      - 3.10
+      - 3.11
+      - 3.12
+
+  TaskCpu:
+    Description: Task CPU
+    Type: Number
+    Default: 256
+    AllowedValues:
+      - 256
+      - 512
+      - 1024
+      - 2048
+      - 4096
+      - 8192
+      - 16384
+
+  TaskMemory:
+    Description: Task memory
+    Type: Number
+    Default: 512
+    MinValue: 512
+    MaxValue: 122880
+
+  TaskEphemeralStorage:
+    Description: Task ephemeral storage
+    Type: Number
+    MinValue: 21
+    MaxValue: 200
+    Default: 21
+
+  EcsAlbIdleTimeout:
+    Description: The ECS ALB idle timeout
+    Type: Number
+    Default: 60
+
+  InstancesCount:
+    Description: Desired number of instantiations
+    Type: Number
+    Default: 1
+    MinValue: 0
+
+  EcrTag:
+    Description: ECR Tag
+    Type: String
+    Default: latest
+
+  RDSInstanceClass:
+    Description: The RDS instance class
+    Type: String
+    Default: db.t4g.micro
+
+  RDSStorageType:
+    Description: The RDS storage type
+    Type: String
+    Default: gp2
+    AllowedValues:
+      - gp2
+      - gp3
+
+  RDSAllocatedStorage:
+    Description: The RDS allocated storage
+    Type: Number
+    Default: 20
+    MinValue: 20
+    MaxValue: 65536
+
+  RDSEngineVersion:
+    Description: The RDS engine version
+    Type: String
+    Default: 16.3
+
+  UniqueDomainName:
+    Description: Unique Domain Name for the environment
+    Type: String
+    Default: ""
+
+  UniqueDomainNameCertificateArn:
+    Description: ARN of the Unique Domain Name certificate
+    Type: String
+    Default: ""
+
+Resources:
+  StackPython:
+    Type: AWS::CloudFormation::Stack
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Retain
+    Properties:
+      TemplateURL:
+        !Sub
+          - "https://${PipelineS3Bucket}.s3.amazonaws.com/stacks/python/cfn-template-v1.1.yml"
+          - PipelineS3Bucket:
+              Fn::ImportValue: !Sub ${PlatformName}-PipelineS3Bucket
+      Parameters:
+        PlatformName: !Ref PlatformName
+        AppName: !Ref AppName
+        AppEnv: !Ref AppEnv
+        RuntimeVersion: !Ref RuntimeVersion
+        TaskCpu: !Ref TaskCpu
+        TaskMemory: !Ref TaskMemory
+        TaskEphemeralStorage: !Ref TaskEphemeralStorage
+        EcsAlbIdleTimeout: !Ref EcsAlbIdleTimeout
+        InstancesCount: !Ref InstancesCount
+        EcrTag: !Ref EcrTag
+        RDSInstanceClass: !Ref RDSInstanceClass
+        RDSStorageType: !Ref RDSStorageType
+        RDSAllocatedStorage: !Ref RDSAllocatedStorage
+        RDSEngineVersion: !Ref RDSEngineVersion
+        UniqueDomainName: !Ref UniqueDomainName
+        UniqueDomainNameCertificateArn: !Ref UniqueDomainNameCertificateArn
+
+Outputs:
+  EcsAlbDNSName:
+    Value: !GetAtt StackPython.Outputs.EcsAlbDNSName
+    Description: DNS Name of the ECS ALB.

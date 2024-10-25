@@ -1,0 +1,27 @@
+@use '@/scss/abstract' as *;
+
+.nav {
+  &__tabs {
+    display: flex;
+
+    &__item {
+      &:not(:last-child)::after {
+        content: '|';
+        font-size: 0.75rem;
+        margin: 0 1rem;
+      }
+    }
+
+    &__link {
+      color: $c-gray-dark;
+      text-decoration: none;
+      letter-spacing: .5px;
+
+      &.active {
+        color: $c-primary;
+        font-weight: 700;
+        pointer-events: none;
+      }
+    }
+  }
+}

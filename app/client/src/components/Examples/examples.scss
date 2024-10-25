@@ -1,0 +1,51 @@
+.card {
+  background-color: #fff;
+  border: 0;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0, .15);
+  padding: 1.5rem;
+}
+
+.pre {
+  font-size: .75rem;
+  padding: .75rem;
+  color: #f9f9f9;
+  background-color: #202626;
+  border-radius: .5rem;
+
+  &__yellod {
+    color: #ffd900;
+  }
+
+  &__green {
+    color: #00ff2c;
+  }
+}
+
+.view-form-values {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  margin-bottom: 0;
+  max-height: 35vh;
+  transition: transform .2s ease;
+  transform: translateY(100vh);
+  overflow: auto;
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, .15);
+
+  .pre {
+    border-radius: 0;
+    margin-bottom: 0;
+    color: #97f2ff;
+  }
+
+  &.on {
+    transform: none;
+  }
+}
+
+.input-extra-class {
+  background-color: lime !important;
+}

@@ -1,0 +1,50 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        type: string
+        required: true
+        description: "The commit sha to use as a source for deployment"
+      ecr_tag:
+        type: choice
+        required: true
+        description: "The target tag used by the app environment to deploy"
+        options:
+          - "uat"
+          - "prod"
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - id: slw
+        uses: JeremyDemers/slw-ci-cd@1.1
+        with:
+          python-version: "3.12"
+          aws-login: true
+
+      - name: Upload artifact to AWS
+        run: |
+          ARCHIVE_PATH="s3://${{ steps.slw.outputs.aws-s3-bucket-platform-pipeline }}/${{ github.event.repository.name }}"
+
+          aws s3 cp \
+            --copy-props none \
+            "$ARCHIVE_PATH/${{ inputs.commit_sha }}.zip" \
+            "$ARCHIVE_PATH/${{ inputs.ecr_tag }}.zip"
+
+      - name: Monitor pipeline
+        run: |
+          slw--aws--pipeline-monitor \
+            "${{ github.event.repository.name }}-${{ inputs.ecr_tag }}-pipeline" \
+            "${{ steps.slw.outputs.aws-region }}"

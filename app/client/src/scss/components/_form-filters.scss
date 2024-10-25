@@ -1,0 +1,98 @@
+@use '@/scss/abstract' as *;
+
+.form-filters {
+  display: flex;
+  flex-direction: column;
+  background-color: $white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0, .15);
+
+  .row {
+    flex-basis: 100%;
+  }
+
+  @include breakpoint((from: tablet)) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__wrapper {
+    width: 100%;
+  }
+
+  &__search {
+    flex: 1 1 auto;
+
+    @include breakpoint((from: tablet)) {
+      flex-basis: 50%;
+      flex-grow: 0;
+      padding-right: 1rem;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-wrap: wrap;
+
+    @include breakpoint((from: widescreen)) {
+      flex-wrap: nowrap;
+    }
+  }
+
+  &__btn-container {
+    order: 0;
+
+    @include breakpoint((from: tablet)) {
+      margin: 0 0 0 auto;
+      display: flex;
+      align-self: start;
+    }
+  }
+
+  &__actions {
+    flex-basis: 100%;
+    margin-top: 1rem;
+  }
+
+  &__item-small {
+    flex: 1 1 100%;
+
+    @include breakpoint((from: tablet)) {
+      flex-basis: calc(50% - 2rem);
+
+      &:nth-child(odd) {
+        margin-right: 2rem;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    @include breakpoint((from: widescreen)) {
+      margin-right: 2rem;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  &__archived {
+    .form-filters__item-small {
+      @include breakpoint((from: tablet)) {
+        flex-basis: calc(33.333% - 2rem);
+
+        &:nth-child(even) {
+          margin-right: 2rem;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,59 @@
+@use '@/scss/abstract' as *;
+
+@font-face {
+  font-family: 'font-icon';
+  // noinspection CssUnknownTarget
+  src: url(@/f-icons/general-icons.woff) format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class*='font-icon-']::before,
+[class*='font-icon-']::after {
+  display: inline-block;
+  font-family: 'font-icon';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: inherit;
+  color: inherit;
+}
+
+[class*='font-icon'] {
+  @extend %font-icon;
+}
+
+@each $name, $glyph in $font-icons {
+  .font-icon-#{$name}::before {
+    @extend %icon-#{$name};
+  }
+}
+
+.material-icons {
+  // prevent shake while icon render
+  max-width: 1em;
+  overflow: hidden;
+}
+
+.icon {
+  @each $name, $size in (
+    xs: .75rem,
+    s: 1.125rem,
+    m: 1.5rem,
+    l: 2rem,
+  ) {
+    &-#{$name} {
+      font-size: $size;
+    }
+  }
+
+  &-left {
+    margin-right: .35rem;
+  }
+
+  &-right {
+    margin-left: .35rem;
+  }
+}

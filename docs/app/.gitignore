@@ -1,0 +1,13 @@
+/*
+*
+
+!/.git*
+!/.editorconfig
+!/README.md
+
+!/**/**/
+!/**/**/README.md
+!/**/**/*.drawio
+!/**/**/*.jpg
+!/**/**/*.jpeg
+!/**/**/*.png

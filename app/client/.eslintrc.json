@@ -1,0 +1,63 @@
+{
+  "plugins": [
+    "sonarjs",
+    "slw"
+  ],
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:promise/recommended",
+    "plugin:xss/recommended",
+    "plugin:sonarjs/recommended-legacy"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "semi": "off",
+    "no-console": 1,
+    "no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": 1,
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/semi": "error",
+    "@typescript-eslint/member-delimiter-style": "error",
+    "react/display-name": "off",
+    "slw/no-translation-key-interpolation": [
+      "error",
+      {
+        "functions": ["t"],
+        "languagesDir": "src/lang"
+      }
+    ],
+    "xss/no-mixed-html": [ 2, {
+      "htmlVariableRules": [ "AsHtml", "HtmlEncoded/i", "^html$" ],
+      "htmlFunctionRules": [ ".asHtml/i", "toHtml" ],
+      "functions": {
+        "$": {
+          "htmlInput": true,
+          "safe": [ "document", "this" ]
+        },
+        ".html": {
+          "htmlInput": true,
+          "htmlOutput": true
+        },
+        ".join": {
+          "passthrough": { "obj": true, "args": true }
+        }
+      }
+    } ],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "jsx-quotes": [2, "prefer-double"],
+    "sonarjs/no-duplicate-string": ["error", { "threshold": 5 }],
+    "promise/catch-or-return": ["error", { "allowFinally": true }]
+  }
+}

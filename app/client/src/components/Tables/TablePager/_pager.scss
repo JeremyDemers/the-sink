@@ -1,0 +1,24 @@
+@use '@/scss/abstract' as *;
+
+.pager {
+  margin-top: 2rem;
+  display: flex;
+
+  list-style: none;
+  padding: 0;
+
+  &__item {
+    margin: 0 .25rem;
+  }
+
+  &__link {
+    padding: .25rem .5rem;
+    text-decoration: none;
+    color: black;
+
+    &.active {
+      font-weight: 600;
+      color: $c-blue;
+    }
+  }
+}

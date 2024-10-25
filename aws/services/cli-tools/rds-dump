@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+set -e
+
+_check_vars() {
+    local MISSING=false
+
+    for VAR in "$@"; do
+        if [[ -z "${!VAR}" ]]; then
+            echo "==> [ERROR] The \"$VAR\" variable is missing."
+            MISSING=true
+        fi
+    done
+
+    if $MISSING; then
+        exit 1
+    fi
+}
+
+AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
+
+_check_vars \
+    APP_NAME \
+    AWS_REGION \
+    AWS_ACCOUNT_ID \
+    DATABASE_HOST \
+    DATABASE_PORT \
+    DATABASE_USER \
+    DATABASE_NAME \
+    DATABASE_PASSWORD
+
+# The `pg_dump` and `psql` utils read this variable.
+export PGPASSWORD="$DATABASE_PASSWORD"
+
+S3_BUCKET_NAME="$AWS_ACCOUNT_ID-smart-lab-web-platform-pipeline"
+S3_DIRECTORY_PATH="$APP_NAME/rds/snapshots"
+
+DATABASE_DUMP_NAME="$DATABASE_NAME--$(date +%F-%H-%M-%S).sql"
+DATABASE_DUMP_ARCHIVE="$DATABASE_DUMP_NAME.tar.gz"
+
+pg_dump \
+    --host "$DATABASE_HOST" \
+    --port "$DATABASE_PORT" \
+    --username "$DATABASE_USER" \
+    --dbname "$DATABASE_NAME" \
+    --file "$DATABASE_DUMP_NAME"
+
+tar -zcf \
+    "$DATABASE_DUMP_ARCHIVE" \
+    "$DATABASE_DUMP_NAME"
+
+aws s3 cp \
+    "$DATABASE_DUMP_ARCHIVE" \
+    "s3://$S3_BUCKET_NAME/$S3_DIRECTORY_PATH/$DATABASE_DUMP_ARCHIVE" \
+    --no-progress \
+    --quiet
+
+rm \
+    "$DATABASE_DUMP_NAME" \
+    "$DATABASE_DUMP_ARCHIVE"
+
+echo "==> [INFO] The DB snapshot has been uploaded to \"https://$AWS_REGION.console.aws.amazon.com/s3/buckets/$S3_BUCKET_NAME?bucketType=general&prefix=$S3_DIRECTORY_PATH/\""

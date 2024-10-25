@@ -1,0 +1,102 @@
+@use '@/scss/abstract' as *;
+
+body {
+  @extend %sink-bg-before;
+}
+
+.visibility-hidden {
+  position: absolute !important;
+  z-index: -1;
+  width: 1px !important;
+  height: 1px !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+.transform-translated-x {
+  transform: scaleX(-1);
+}
+
+.transform-translated-y {
+  transform: scaleY(-1);
+}
+
+hr {
+  &.w-100vw {
+    @extend %w-100vw;
+  }
+}
+
+.extlink {
+  white-space: nowrap;
+
+  &::after {
+    font-size: inherit;
+    color: inherit;
+    margin-left: 2px;
+    transform: translateY(10%);
+
+    @extend %font-icon;
+    @extend %icon-external-link;
+  }
+}
+
+.loader {
+  @extend %loader;
+
+  &--primary {
+    @extend %loader--primary;
+  }
+
+  &--component {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .loader {
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+
+.info-block {
+  font-size: .875rem;
+  display: flex;
+  align-items: flex-start;
+  background-color: $c-orange-light;
+  border-radius: .5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid $c-orange;
+
+  .font-icon-info {
+    margin-right: .5rem;
+    color: $c-orange;
+    line-height: 1.3;
+  }
+
+  p {
+    font-size: inherit;
+    margin-bottom: 0;
+  }
+}
+
+.pre {
+  font-size: .75rem;
+  padding: .75rem;
+  color: #f9f9f9;
+  background-color: #202626;
+
+  border-radius: .5rem;
+
+  &__yellod {
+    color: #ffd900;
+  }
+
+  &__green {
+    color: #00ff2c;
+  }
+}

@@ -10,7 +10,7 @@ requires-python = ">= 3.11"
 dependencies = [
     "Flask==3.0.3",
     "Flask-Caching==2.3.0",
-    "flask-cognito-lib==1.9.1",
+    "flask-cognito-lib==1.9.3",
     "Flask-Cors==5.0.0",
     "Flask-Login==0.6.3",
     "Flask-Migrate==4.0.7",
